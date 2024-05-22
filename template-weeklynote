@@ -1,0 +1,32 @@
+<< [[<% tp.date.weekday("[Wk]WW-MMM-DD", 0) %>]] || [[<% tp.date.weekday("[Wk]WW-MMM-DD", 7) %>]] >> 
+
+# <% tp.date.now("[Week ]WW") %>
+
+
+## Notes
+
+### <% tp.date.weekday("dddd, MMM DD",0) %>
+
+### <% tp.date.weekday("dddd, MMM DD",1) %>
+
+### <% tp.date.weekday("dddd, MMM DD",2) %>
+
+### <% tp.date.weekday("dddd, MMM DD",3) %>
+
+### <% tp.date.weekday("dddd, MMM DD",4) %>
+
+### <% tp.date.weekday("dddd, MMM DD",5) %>
+
+### <% tp.date.weekday("dddd, MMM DD",6) %>
+
+## Tasks
+
+## Other
+
+```dataview
+TABLE WITHOUT ID
+file.link as "Notes" 
+WHERE file.cday >= date("<% tp.date.weekday("YYYY-MM-DD", 0) %>")
+   AND file.cday <= date("<% tp.date.weekday("YYYY-MM-DD", 6) %>")
+SORT filename.ctime asc
+```
