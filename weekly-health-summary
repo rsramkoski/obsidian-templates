@@ -1,0 +1,185 @@
+---
+date: <% tp.date.now("YYYY-MM-DD") %>
+week: <% tp.date.now("WW") %>
+year: <% tp.date.now("YYYY") %>
+week_start: <% tp.date.now("YYYY-MM-DD", 1 - iso) %>
+week_end: <% tp.date.now("YYYY-MM-DD", 7 - iso) %>
+weight: <% await tp.system.prompt("Weight (lbs)", "") %>
+---
+
+# Week <% tp.date.now("WW") %> · <% tp.date.now("YYYY") %>
+<% tp.date.now("MMM D", 1 - iso) %> → <% tp.date.now("MMM D", 7 - iso) %>
+
+> [!warning]- One-time setup
+> In the three `dataviewjs` chart blocks below, update `DAILY_FOLDER` to the
+> vault-relative path of your daily health notes (e.g. `02-Cowork/Health/Daily`).
+> Do the same for the Dataview table `FROM` path.
+
+---
+
+## Weekly Metrics
+
+```dataview
+TABLE WITHOUT ID
+  file.link AS "Day",
+  bp_systolic + "/" + bp_diastolic AS "BP",
+  hrv AS "HRV",
+  sleep_score AS "Sleep",
+  energy AS "Energy",
+  strain AS "Strain",
+  emotional_eating AS "Emot?"
+FROM "02-Cowork/Health/Daily"
+WHERE date >= this.week_start AND date <= this.week_end
+SORT date ASC
+
+---
+Trends
+
+--- start-multi-column: WeeklyCharts
+Number of Columns: 3
+Column Size: equal
+Border: off
+
+HRV
+
+const DAILY_FOLDER = "02-Cowork/Health/Daily";
+const ws = dv.current().week_start;
+const we = dv.current().week_end;
+const pages = dv.pages(`"${DAILY_FOLDER}"`)
+  .where(p => p.date && p.date >= ws && p.date <= we)
+  .sort(p => p.date, 'asc');
+const labels = pages.map(p => p.date.toFormat("EEE")).values;
+const data   = pages.map(p => p.hrv ?? null).values;
+const chartData = {
+  type: 'line',
+  data: {
+    labels,
+    datasets: [{
+      label: 'HRV (ms)',
+      data,
+      borderColor: '#689d6a',
+      backgroundColor: 'rgba(104,157,106,0.12)',
+      tension: 0.35,
+      fill: true,
+      spanGaps: true,
+      pointRadius: 4,
+      pointBackgroundColor: '#689d6a'
+    }]
+  },
+  options: {
+    plugins: { legend: { display: false } },
+    scales: {
+      y: { beginAtZero: false, grid: { color: 'rgba(168,153,132,0.15)' } },
+      x: { grid: { color: 'rgba(168,153,132,0.15)' } }
+    }
+  }
+};
+if (window.renderChart) window.renderChart(chartData, this.container);
+else dv.paragraph('⚠️ Enable phibr0/obsidian-charts');
+
+--- column-break ---
+
+Energy
+
+const DAILY_FOLDER = "02-Cowork/Health/Daily";
+const ws = dv.current().week_start;
+const we = dv.current().week_end;
+const pages = dv.pages(`"${DAILY_FOLDER}"`)
+  .where(p => p.date && p.date >= ws && p.date <= we)
+  .sort(p => p.date, 'asc');
+const labels = pages.map(p => p.date.toFormat("EEE")).values;
+const data   = pages.map(p => p.energy ?? null).values;
+const chartData = {
+  type: 'bar',
+  data: {
+    labels,
+    datasets: [{
+      label: 'Energy (1–5)',
+      data,
+      backgroundColor: 'rgba(215,153,33,0.65)',
+      borderColor: '#d79921',
+      borderWidth: 1,
+      borderRadius: 3
+    }]
+  },
+  options: {
+    plugins: { legend: { display: false } },
+    scales: {
+      y: { min: 0, max: 5, ticks: { stepSize: 1 },
+           grid: { color: 'rgba(168,153,132,0.15)' } },
+      x: { grid: { display: false } }
+    }
+  }
+};
+if (window.renderChart) window.renderChart(chartData, this.container);
+else dv.paragraph('⚠️ Enable phibr0/obsidian-charts');
+
+--- column-break ---
+
+Blood Pressure
+
+const DAILY_FOLDER = "02-Cowork/Health/Daily";
+const ws = dv.current().week_start;
+const we = dv.current().week_end;
+const pages = dv.pages(`"${DAILY_FOLDER}"`)
+  .where(p => p.date && p.date >= ws && p.date <= we)
+  .sort(p => p.date, 'asc');
+const labels = pages.map(p => p.date.toFormat("EEE")).values;
+const chartData = {
+  type: 'line',
+  data: {
+    labels,
+    datasets: [
+      {
+        label: 'Systolic',
+        data: pages.map(p => p.bp_systolic ?? null).values,
+        borderColor: '#cc241d',
+        backgroundColor: 'rgba(204,36,29,0.08)',
+        tension: 0.3,
+        spanGaps: true,
+        pointRadius: 4
+      },
+      {
+        label: 'Diastolic',
+        data: pages.map(p => p.bp_diastolic ?? null).values,
+        borderColor: '#458588',
+        backgroundColor: 'rgba(69,133,136,0.08)',
+        tension: 0.3,
+        spanGaps: true,
+        pointRadius: 4
+      }
+    ]
+  },
+  options: {
+    plugins: { legend: { labels: { color: '#a89984', boxWidth: 12 } } },
+    scales: {
+      y: { min: 50, max: 180, grid: { color: 'rgba(168,153,132,0.15)' } },
+      x: { grid: { color: 'rgba(168,153,132,0.15)' } }
+    }
+  }
+};
+if (window.renderChart) window.renderChart(chartData, this.container);
+else dv.paragraph('⚠️ Enable phibr0/obsidian-charts');
+
+--- end-multi-column
+
+---
+What Moved the Needle?
+
+1. What felt best this week?
+
+
+2. What held me back or drained energy?
+
+
+3. One thing to do differently next week:
+
+
+---
+Health Tasks
+
+```tasks
+not done
+tags include #health
+sort by due
+```
