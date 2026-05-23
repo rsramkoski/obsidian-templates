@@ -1,0 +1,61 @@
+---
+date: <% tp.date.now("YYYY-MM-DD") %>
+day: <% tp.date.now("dddd") %>
+week: <% tp.date.now("WW") %>
+bp_systolic: <% await tp.system.prompt("BP Systolic (mmHg)", "") %>
+bp_diastolic: <% await tp.system.prompt("BP Diastolic (mmHg)", "") %>
+hrv:
+sleep_score:
+energy:
+eating_window_start: "08:00"
+eating_window_end: "18:00"
+weight:
+strain:
+emotional_eating:
+---
+
+# <% tp.date.now("dddd, MMMM D") %> · Week <% tp.date.now("WW") %>
+
+> [!info]+ Morning Check-in
+> 🩺 **BP:** `= this.bp_systolic` / `= this.bp_diastolic` mmHg
+> 💓 **Resting HR:** ___ bpm
+> 📊 **HRV (Whoop):** `= this.hrv` ms
+> 😴 **Sleep Score (Oura):** `= this.sleep_score`
+> ⚡ **Energy:** `= this.energy` / 5
+> 🕐 **Eating Window Planned:** `= this.eating_window_start` → `= this.eating_window_end`
+>
+> *Energy: 😴 1 · 😕 2 · 😐 3 · 😊 4 · ⚡ 5*
+> *Edit HRV, sleep, energy, and weight via Properties (⌘+.)*
+
+---
+
+## Food Log
+
+**Breakfast** *(don't skip this one)*:
+
+**Lunch**:
+
+**Dinner**:
+
+**Snacks**:
+
+**Eating window actual:** ___:___ → ___:___
+
+---
+
+## Movement
+
+Workout: Y / N · Type: · Duration:  min
+Whoop Strain (EOD): *(update `strain` in Properties)*
+
+---
+
+> [!quote]+ Evening Reflection
+>
+> **Today in one honest sentence:**
+>
+>
+> **What did I notice?**
+>
+>
+> **Emotional eating?** Y / N *(update `emotional_eating` in Properties)*
