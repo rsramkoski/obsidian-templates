@@ -1,32 +1,37 @@
-<< [[<% tp.date.weekday("[Wk]WW-MMM-DD", 0) %>]] || [[<% tp.date.weekday("[Wk]WW-MMM-DD", 7) %>]] >> 
+---
+aliases: 
+tags:
+created: <% tp.date.now("YYYY-MM-DD") %>
+summary:
+---
 
-# <% tp.date.now("[Week ]WW") %>
+# <% tp.date.weekday("dddd, MMMM DD",0) %>
+<< [[<% tp.date.weekday("[Wk]ww-MM-DD",-7) %>]] || [[<% tp.date.weekday("[Wk]ww-MM-DD",7) %>]] >>
 
+---
+## Tasks
+```tasks
+not done
+path includes {{query.file.path}}
+```
 
 ## Notes
 
-### <% tp.date.weekday("dddd, MMM DD",0) %>
+<%*
+for (let i = 0; i < 7; i++) {
+  tR += `### ${tp.date.weekday("dddd, MMMM DD", i)}\n`;
+}
+%>
 
-### <% tp.date.weekday("dddd, MMM DD",1) %>
+## Reflection
+*Think about wins, struggles, losses, lessons, and adjustments for next week.*
 
-### <% tp.date.weekday("dddd, MMM DD",2) %>
-
-### <% tp.date.weekday("dddd, MMM DD",3) %>
-
-### <% tp.date.weekday("dddd, MMM DD",4) %>
-
-### <% tp.date.weekday("dddd, MMM DD",5) %>
-
-### <% tp.date.weekday("dddd, MMM DD",6) %>
-
-## Tasks
-
-## Other
+## Notes created
 
 ```dataview
-TABLE WITHOUT ID
-file.link as "Notes" 
-WHERE file.cday >= date("<% tp.date.weekday("YYYY-MM-DD", 0) %>")
-   AND file.cday <= date("<% tp.date.weekday("YYYY-MM-DD", 6) %>")
+TABLE file.etags as "Tags"
+FROM ""
+WHERE file.cday >= date("<% tp.date.now("YYYY-MM-DD") %>")
+   AND file.cday <= date("<% tp.date.now("YYYY-MM-DD", 6) %>")
 SORT filename.ctime asc
 ```
