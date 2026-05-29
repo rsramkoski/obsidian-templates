@@ -1,3 +1,4 @@
+<%* const iso = Number(tp.date.now("E")); -%>
 ---
 date: <% tp.date.now("YYYY-MM-DD") %>
 day: <% tp.date.now("dddd") %>
